@@ -1,0 +1,196 @@
+'''
+Created on 11/19/19
+@author: Sanjana Madhu
+Pledge: I pledge my honor that I have abided by the Stevens Honor System
+
+CS115 - Hw 10 - Date class
+'''
+DAYS_IN_MONTH = (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+
+class Date(object):
+    '''A user-defined data structure that stores and manipulates dates.'''
+
+    # The constructor is always named __init__.
+    def __init__(self, month, day, year):
+        '''The constructor for objects of type Date.'''
+        self.month = month
+        self.day = day
+        self.year = year
+
+    # The 'printing' function is always named __str__.
+    def __str__(self):
+        '''This method returns a string representation for the
+           object of type Date that calls it (named self).
+
+             ** Note that this _can_ be called explicitly, but
+                it more often is used implicitly via the print
+                statement or simply by expressing self's value.'''
+        return '%02d/%02d/%04d' % (self.month, self.day, self.year)
+
+    # Here is an example of a 'method' of the Date class.
+    def isLeapYear(self):
+        '''Returns True if the calling object is in a leap year; False
+        otherwise.'''
+        if self.year % 400 == 0:
+            return True
+        if self.year % 100 == 0:
+            return False
+        if self.year % 4 == 0:
+            return True
+        return False
+
+    def copy(self):
+        '''Returns a new object with the same month, day, year as the calling
+        object (self).'''
+        dnew = Date(self.month, self.day, self.year)
+        return dnew
+
+    def equals(self, d2):
+        '''Decides if self and d2 represent the same calendar date,
+        whether or not they are the in the same place in memory.'''
+        return self.year == d2.year and self.month == d2.month and \
+            self.day == d2.day
+
+    def tomorrow(self):
+        """ This function return the next day in the calender year. It accounts for
+            leap years"""
+        self.day += 1
+        if DAYS_IN_MONTH[self.month] < self.day:
+            if self.month == 12:
+                self.month = 1
+                self.day = 1
+                self.year += 1
+            elif Date.isLeapYear(self) == True and self.month == 2:
+                if (self.day - 1)== 28:
+                    self.day = 29
+                elif (self.day - 1) == 29:
+                    self.month = 3
+                    self.day = 1
+            else:
+                self.day = 1
+                self.month += 1
+                
+        
+    def yesterday(self):
+        """ This function return the previous day in the calender year. It accounts for
+            leap years"""
+        self.day -= 1        
+        if self.day == 0:
+            if self.month == 1:
+                self.month = 12
+                self.day = 31
+                self.year -= 1
+            elif self.month == 3 and Date.isLeapYear(self) == True:
+                self.day = 29
+                self.month -=1  
+            else:
+                self.day = DAYS_IN_MONTH[self.month - 1]
+                self.month -= 1
+
+    def addNDays(self, N):
+        """ Adds N number of days to the given day using a for loop and the
+            tomorrow function"""
+        print(self)
+        for days in range(0,N):
+            self.tomorrow()
+            print(self)
+
+    def subNDays(self, N):
+        """ Subtracts N number of days to the given day using a for loop and the
+            yesterday function"""
+        print(self)
+        for days in range(0,N):
+            self.yesterday()
+            print(self)
+
+    def isBefore(self, d2):
+        """ Finds out whether or not a given day is before a different given day. If
+            the day is before, the function returns True. If not, the function returns
+            False """
+        if self.month < d2.month:
+            if self.year > d2.year:
+                return False
+        if self.year < d2.year:
+            return True
+        if self.month < d2.month:
+            return True
+        if self.day < d2.day:
+            return True
+        elif Date.equals(self, d2) == True:
+            return False
+        else:
+            return False
+
+    def isAfter(self, d2):
+        """ Finds out whether or not a given day is after a different given day. If
+        the day is after, the function returns True. If not, the function returns False """
+        if self.month > d2.month:
+            if self.year < d2.year:
+                return False
+        if self.year > d2.year:
+            return True
+        if self.month > d2.month:
+            return True
+        if self.day > d2.day:
+            return True
+        elif Date.equals(self, d2) == True:
+            return False
+        else:
+            return False 
+            
+    def diff(self, d2):
+        """This function finds the number of days between two given days"""
+        count = 0
+        a = Date.copy(self)
+        b = Date.copy(d2)
+        while a.isAfter(b):
+            a.yesterday()
+            count += 1
+        while a.isBefore(b):
+            a.tomorrow()
+            count -= 1
+        return count        
+
+    def dow(self):
+        """ Returns the corresponding day of the week to the given date"""
+        original = Date(11,17,2019)
+        copy = Date.copy(original)
+        difference = self.diff(copy)
+        mod = abs(difference) % 7
+        
+        if Date.isBefore(self, original) == True:
+            if mod == 0:
+                return "Sunday"
+            if mod == 6:
+                return "Monday"
+            if mod == 5:
+                return "Tuesday"
+            if mod == 4:
+                return "Wednesday"
+            if mod == 3:
+                return "Thursday"
+            if mod == 2:
+                return "Friday"
+            if mod == 1:
+                return "Saturday"
+        else:
+            if mod == 0:
+                return "Sunday"
+            if mod == 1:
+                return "Monday"
+            if mod == 2:
+                return "Tuesday"
+            if mod == 3:
+                return "Wednesday"
+            if mod == 4:
+                return "Thursday"
+            if mod == 5:
+                return "Friday"
+            if mod == 6:
+                return "Saturday"
+        
+            
+        
+            
+
+
