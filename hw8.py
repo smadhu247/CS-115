@@ -1,166 +1,80 @@
-'''
-@author: Sanjana Madhu
-Pledge: I pledge my honor that I have abided by the Stevens Honor 
-
-CS115 - Hw 8
-
-Objective: To become familiar with imperative style and for and while loops.
-
-Instructions: Submit a copy of this file (with your name and pledge and) with
-the incomplete functions completed. Don't change the functions that are
-already implemented.
-
-# Search for "TODO" to find the incomplete functions.
-'''
-from cs115 import map, reduce
-
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Exercise 1
-' Study function questify(). Then implement questifyAlt() so that it gives
-' the same results as questify(), using map and lambda but no helping function.
-' Hint: adapt the body of addQuestmark().
+' You are given a rod of length n feet and a list of pairs that contain the
+' prices of pieces of various sizes. For instance, [[1, 1], [2, 3]] means
+' that a 1-foot rod costs $1 and a 2-foot rod costs $3. Complete the
+' rod_cutter function found below. The function should compute the maximum
+' value that can be obtained by cutting up the rod and selling the pieces.
+' For example, if the length of the rod is 4 feet long and the values are
+' [[1, 1], [2, 3]], the maximum value is 6, obtained by cutting the rod into
+' two pieces of length 2, each worth $3.
+' Hints:`
+' a. Implement a use-it or lose-it algorithm
+' b. Consider multiple bases cases
+' c. values[0][0] refers to the length of the rod,
+'    values[0][1] refers to the cost of the rod
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-def questify(str_list):
-    '''Assume str_list is a list of strings. Returns a list of
-    the same strings but with ? suffixed to each.'''
-    def addQuestmark(s):
-        '''Adds a question mark to a string.'''
-        return s + '?'
 
-    return map(addQuestmark, str_list)
+#Sanjana Madhu
+# I pledge my honor that I have abided by the Stevens Honor System
 
-def questifyAlt(str_list):
-    '''Same as questify'''
-    if str_list == []:
-        return []
-    else:
-        for x in str_list:
-            return map(lambda x: x + '?', str_list)
-
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Exercise 2
-' Study functions leppard() and catenate(). Implement catenateLoop(), without
-' using recursion or reduce or any built-in Python function. Instead, use a
-' loop. In some ways your code will resemble the body of leppard().
-' If you prefer, you can follow the style of leppardIndex(), but I suggest not.
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-def leppard(inputString):
-    '''Mystery.'''
-    outputString = ''
-    for symbol in inputString:
-        if symbol == 'o':
-            outputString = outputString + 'ooo'
-        else:
-            outputString = outputString + symbol
-    print(outputString)
-
-def leppardIndex(inputString):
-    '''Same as leppard(), but using an integer index rather than directly
-    referring to elements of the input string.'''
-    outputString = ''
-    for i in range(len(inputString)):
-        if inputString[i] == 'o':
-            outputString = outputString + 'ooo'
-        else:
-            outputString = outputString + inputString[i]
-    print(outputString)
-
-def catenate(str_list):
-    '''Assume str_list is a list of strings.
-    Return a single string, their catenation.'''
-    if str_list == []:
-        return ''
-    return reduce(lambda s, t: s + t, str_list)
-
-def catenateLoop(str_list):
-    '''Same as catenate'''
-    symbol = ""
-    for x in str_list:
-        symbol = symbol + x
-    return symbol    
-
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Exercise 3
-' Implement letterScoreLoop using --you guessed it-- a loop instead of
-' recursion. Also, do not use map or reduce.
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-scrabbleScores = [["a", 1], ["b", 3], ["c", 3], ["d", 2], ["e", 1], ["f", 4], \
-                  ["g", 2], ["h", 4], ["i", 1], ["j", 8], ["k", 5], ["l", 1], \
-                  ["m", 3], ["n", 1], ["o", 1], ["p", 3], ["q", 10], ["r", 1], \
-                  ["s", 1], ["t", 1], ["u", 1], ["v", 4], ["w", 4], ["x", 8], \
-                  ["y", 4], ["z", 10]]
-
-aDictionary = ["a", "am", "at", "apple", "bat", "bar", "babble", "can", "foo", \
-               "spam", "spammy", "zzyzva"]
-
-def letterScore(letter, scorelist):
-    '''Assume scorelist is a list of lists [ltr, val] where ltr is a single
-    letter and val is a natural number. Assume letter is a single letter string,
-    that occurs in scorelist. Return the associated value.'''
-    if letter == scorelist[0][0]:
-        return scorelist[0][1]
-    return letterScore(letter, scorelist[1:])
-
-def letterScoreLoop(letter, scorelist):
-    '''Same as letterScore'''
-    # HINTS: You can rely on the assumption that letter occurs in scorelist.
-    # It may be helpful to use an if-statement without an else.
-    for x in scorelist:
-        if x[0] == letter:
-            return x[1]
-            
-
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Exercise 4
-' Implement wordScoreLoop using a loop instead of recursion. (And don't
-' use map or reduce.)
-' Use letterScore() or letterScoreLoop(); it shouldn't matter which one.
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-def wordScore(S, scorelist):
-    '''Assume S is a string and scorelist is in the format above and
-    includes every letter in S. Return the scrabble score of that string.'''
-    if S == '':
+def rod_cutter(values, n):
+    if n == 0 or values == []:
         return 0
-    return letterScore(S[0], scorelist) + wordScore(S[1:], scorelist)
-
-def wordScoreLoop(S, scorelist):
-    '''Same as wordScore'''
-    letterSum = 0
-    for x in S:
-        letterSum = letterSum + letterScore(x, scorelist)
-    return letterSum    
-    
-
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Exercise 5
-' Implement wordsWithScoreLambda using a lambda instead of the helper scoreWord.
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-def wordsWithScore(dct, scores):
-    '''Assume dct is a list of words and scores is a list of [letter, number]
-    pairs. Return a copy of the dictionary, annotated so each word is paired
-    with its value. For example, wordsWithScore(scrabbleScores, aDictionary)
-    should return [["a", 1], ["am", 4], ["at", 2] ...etc... ]'''
-    def scoreWord(wrd):
-        return [ wrd, wordScore(wrd, scores) ]
-
-    return map(scoreWord, dct)
-
-def wordsWithScoreLambda(dct, scores):
-    '''Same as wordsWithScore'''
-    if dct == []:
-        return []
+    elif values[0][0] > n:
+        return rod_cutter(values[1:], n)
     else:
-        return map(lambda x: [x, wordScore(x, scores)], dct)
+        useIt = values[0][1] + rod_cutter(values, n - values[0][0])
+        loseIt = rod_cutter(values[1:], n)
+        return max(useIt, loseIt)
+        
+    
+def rod_cutter_with_values(values, n):
+    if n == 0 or values == []:
+        return (0, [])
+    elif values[0][0] > n:
+        return rod_cutter_with_values(values[1:], n)
+    else:
+        useIt = rod_cutter_with_values(values, n - values[0][0])
+        loseIt = rod_cutter_with_values(values[1:], n)
+        choose = (values[0][1] + useIt[0], useIt[1]+[values[0][0]])   
+        return max(choose, loseIt)
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Exercise 6
-' Implement wordsWithScoreLoop using a loop instead of map or recursion.
-' Be careful NOT to change the dictionary.
+' Code to test your work. DO NOT TOUCH.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-def wordsWithScoreLoop(dct, scores):
-    '''Same as wordsWithScore'''
-    values = []
-    for x in dct:
-       values.append([x, wordScore(x, scores)])
-    return values        
-        
+def test(test_num, function, input1, input2, expected_output):
+    received = function(input1, input2)
+    try:
+        assert(received == expected_output)
+        print('Test %d passed.' % test_num)
+    except:
+        if isinstance(input1, str):
+            print('Test %d failed: %s(\'%s\', \'%s\') should be %s.' %
+                  (test_num, function.__name__, input1, input2, expected_output))
+            print('   -- Received %s.' % str(received))
+        else:
+            print('Test %d failed: %s(%s, %s) should be %s.' %
+                  (test_num, function.__name__, input1, input2, expected_output))
+            print('   -- Received %s.' % str(received))
+
+test(1, rod_cutter, [], 10, 0)
+test(2, rod_cutter, [[1, 1]], 1, 1)
+test(3, rod_cutter, [[1, 1], [2, 3]], 2, 3)
+test(4, rod_cutter, [[1, 2], [2, 2]], 2, 4)
+test(5, rod_cutter, [[1, 1], [2, 3]], 4, 6)
+test(6, rod_cutter, [[1, 1], [2, 3], [3, 4]], 2, 3)
+test(7, rod_cutter, [[1, 1], [2, 5], [3, 8], [4, 9], [5, 10], [6, 17], [7, 17], [8, 20]], 8, 22)
+test(8, rod_cutter, [[1, 1], [2, 5], [3, 8], [4, 9], [5, 10], [6, 17], [7, 17], [8, 20]], 15, 42)
+test(9, rod_cutter, [[1, 1], [2, 5], [3, 8], [4, 9], [5, 10], [6, 17], [7, 17], [8, 20]], 23, 64)
+test(10, rod_cutter, [[1, 1], [2, 5], [3, 8], [4, 9], [5, 10], [6, 17], [7, 17], [8, 20]], 29, 81)
+
+test(11, rod_cutter_with_values, [], 10, (0, []))
+test(12, rod_cutter_with_values, [[1, 1]], 1, (1, [1]))
+test(13, rod_cutter_with_values, [[1, 1], [2, 3]], 2, (3, [2]))
+test(14, rod_cutter_with_values, [[1, 2], [2, 2]], 2, (4, [1, 1]))
+test(15, rod_cutter_with_values, [[1, 1], [2, 3]], 4, (6, [2, 2]))
+test(16, rod_cutter_with_values, [[1, 1], [2, 3], [3, 4]], 2, (3, [2]))
+test(17, rod_cutter_with_values, [[1, 1], [2, 5], [3, 8], [4, 9], [5, 10], [6, 17], [7, 17], [8, 20]], 8, (22, [6, 2]))
+test(18, rod_cutter_with_values, [[1, 1], [2, 5], [3, 8], [4, 9], [5, 10], [6, 17], [7, 17], [8, 20]], 15, (42, [6, 6, 3]))
+test(19, rod_cutter_with_values, [[1, 1], [2, 5], [3, 8], [4, 9], [5, 10], [6, 17], [7, 17], [8, 20]], 23, (64, [6, 6, 6, 3, 2]))
+test(20, rod_cutter_with_values, [[1, 1], [2, 5], [3, 8], [4, 9], [5, 10], [6, 17], [7, 17], [8, 20]], 29, (81, [6, 6, 6, 6, 3, 2]))
